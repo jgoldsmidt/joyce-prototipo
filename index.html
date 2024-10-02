@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joyce.ar - Sincronización de idiomas</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600&family=Cormorant+Garamond:wght@400&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #f0f0f5; /* Fondo claro */
+            color: #000;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+
+        body.dark-mode {
+            background-color: #121212; /* Fondo oscuro */
+            color: #e0e0e0; /* Texto claro */
+        }
+
+        /* Imagen de fondo en modo oscuro */
+        body.dark-mode::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('/mnt/data/Web juli_Mesa de trabajo 1-05.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.3; /* Ajusta la opacidad para que no sea tan invasiva */
+            z-index: -1; /* Coloca la imagen debajo del contenido */
+        }
+
+        /* Estilo del navbar */
+        .navbar {
+            background-color: #f0f0f5;
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-mode .navbar {
+            background-color: #121212;
+        }
+
+        .navbar-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+
+        .navbar-nav .nav-link {
+            font-size: 24px;
+            margin: 0 10px;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
+
+        /* Títulos */
+        .header {
+            text-align: center;
+            padding: 30px;
+        }
+        .header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .dark-mode .header h1 {
+            color: #e0e0e0;
+        }
+
+        /* Contenedores con scroll */
+        .scroll-container {
+            position: relative;
+            width: 100%;
+            height: 50vh;
+            padding: 10px 15px; /* Ajustado padding */
+            border-radius: 25px;
+            background-color: white;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15), 0px 0px 15px rgba(0, 0, 0, 0.1); 
+            margin-bottom: 30px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .dark-mode .scroll-container {
+            background-color: #3a3a3a;
+            color: #e0e0e0;
+            box-shadow: 0px 10px 30px rgba(255, 255, 255, 0.2), 0px 0px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Contenedor desplazable */
+        .scrollable-content {
+            max-height: 30vh; /* Altura máxima del contenido desplazable */
+            overflow-y: auto;
+            padding-right: 15px; /* Espacio adicional para que el texto no esté pegado al scroll */
+        }
+
+        /* Barra de scroll personalizada */
+        .scrollable-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scrollable-content::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        .scrollable-content::-webkit-scrollbar-thumb {
+            background-color: #888;
+            border-radius: 10px;
+        }
+
+        .scrollable-content::-webkit-scrollbar-thumb:hover {
+            background-color: #555;
+        }
+
+        /* Título del contenido y círculo fijos */
+        .lang-header {
+            position: relative;
+            z-index: 1;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Estilo de los párrafos */
+        .scrollable-content p.equivalent {
+            font-size: 15px;
+            line-height: 1.4;
+            transition: background-color 0.3s ease;
+            font-family: 'Assistant', sans-serif;
+            margin-right: 15px; /* Añadir margen derecho */
+        }
+
+        /* Ajuste de color para el hover según modo claro u oscuro */
+        .highlight {
+            background-color: #b3b3b3;
+        }
+        body.dark-mode .highlight {
+            background-color: #666666;
+        }
+
+        /* Iconos de idioma */
+        .lang-circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            font-weight: bold;
+            color: white;
+            background: radial-gradient(circle, black, grey, white);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        /* Títulos de versiones */
+        .version-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 0;
+            margin-bottom: 0;
+            display: inline-block;
+        }
+
+        .dark-mode .version-title {
+            color: #e0e0e0;
+        }
+
+        /* Botón de modo oscuro con ícono */
+        .toggle-dark-mode {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background-color: transparent;
+            border: none;
+            font-size: 24px;
+            color: #000;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .dark-mode .toggle-dark-mode {
+            color: #e0e0e0;
+        }
+
+        /* Ajustes para pantallas más grandes */
+        @media (min-width: 992px) {
+            .col-md-4 {
+                flex: 0 0 33.3333%;
+                max-width: 33.3333%;
+            }
+        }
+
+        /* Ajustes para pantallas muy pequeñas (teléfonos) */
+        @media (max-width: 576px) {
+            .scroll-container {
+                height: 45vh;
+            }
+            .lang-circle {
+                width: 15px;
+                height: 15px;
+                font-size: 7px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar con íconos -->
+<nav class="navbar navbar-expand">
+    <div class="container-fluid justify-content-center">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="bi bi-arrow-left"></i></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="bi bi-gear"></i></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="bi bi-house"></i></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="bi bi-book"></i></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="bi bi-person"></i></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Botón para alternar modo oscuro con ícono de sol/luna -->
+<button class="toggle-dark-mode">
+    <i class="bi bi-moon-fill"></i>
+</button>
+
+<!-- Header con el título central restaurado -->
+<div class="header">
+    <h1>LA HIPNOSIS</h1>
+</div>
+
+<!-- Sección de contenido con títulos, círculos y cajas de texto -->
+<div class="container">
+    <div class="row">
+        <!-- Caja de texto en español -->
+        <div class="col-md-4 col-sm-12">
+            <div class="scroll-container" id="scroll1">
+                <div class="lang-header">
+                    <h3 class="version-title">Versión 1 - Español</h3>
+                    <span class="lang-circle">ES</span>
+                </div>
+                <div class="scrollable-content">
+                    <p class="equivalent" data-id="1">
+                        Este es un párrafo en español. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                    <p class="equivalent" data-id="2">Este es otro párrafo largo en español.</p>
+                    <p class="equivalent" data-id="3">Este es otro párrafo largo en español. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Caja de texto en francés -->
+        <div class="col-md-4 col-sm-12">
+            <div class="scroll-container" id="scroll2">
+                <div class="lang-header">
+                    <h3 class="version-title">Versión 2 - Français</h3>
+                    <span class="lang-circle">FR</span>
+                </div>
+                <div class="scrollable-content">
+                    <p class="equivalent" data-id="1">
+                        Voici un paragraphe en français. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                    <p class="equivalent" data-id="2">Voici un autre paragraphe long en français.</p>
+                    <p class="equivalent" data-id="3">Voici un autre paragraphe long en français. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Caja de texto en inglés -->
+        <div class="col-md-4 col-sm-12">
+            <div class="scroll-container" id="scroll3">
+                <div class="lang-header">
+                    <h3 class="version-title">Versión 3 - English</h3>
+                    <span class="lang-circle">EN</span>
+                </div>
+                <div class="scrollable-content">
+                    <p class="equivalent" data-id="1">
+                        This is a paragraph in English. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
+                    <p class="equivalent" data-id="2">This is another long paragraph in English.</p>
+                    <p class="equivalent" data-id="3">This is another long paragraph in English. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS y Bootstrap Icons -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Obtenemos los elementos de scroll
+    const scroll1 = document.querySelector('#scroll1 .scrollable-content');
+    const scroll2 = document.querySelector('#scroll2 .scrollable-content');
+    const scroll3 = document.querySelector('#scroll3 .scrollable-content');
+
+    // Función para sincronizar el scroll proporcionalmente
+    function syncScroll(source, targets) {
+        const scrollPercentage = source.scrollTop / (source.scrollHeight - source.clientHeight);
+
+        targets.forEach(target => {
+            const targetScrollTop = scrollPercentage * (target.scrollHeight - target.clientHeight);
+            target.scrollTop = targetScrollTop;
+        });
+    }
+
+    // Agregamos el evento de scroll a cada contenedor
+    scroll1.addEventListener('scroll', () => syncScroll(scroll1, [scroll2, scroll3]));
+    scroll2.addEventListener('scroll', () => syncScroll(scroll2, [scroll1, scroll3]));
+    scroll3.addEventListener('scroll', () => syncScroll(scroll3, [scroll1, scroll2]));
+
+    // Función para resaltar párrafos equivalentes
+    function highlightParagraphs(paragraph) {
+        const dataId = paragraph.getAttribute('data-id');
+        const equivalents = document.querySelectorAll(`.equivalent[data-id="${dataId}"]`);
+        equivalents.forEach(el => el.classList.add('highlight'));
+    }
+
+    // Función para quitar el resaltado
+    function removeHighlight(paragraph) {
+        const dataId = paragraph.getAttribute('data-id');
+        const equivalents = document.querySelectorAll(`.equivalent[data-id="${dataId}"]`);
+        equivalents.forEach(el => el.classList.remove('highlight'));
+    }
+
+    // Agregar eventos de hover a todos los párrafos
+    const paragraphs = document.querySelectorAll('.equivalent');
+    paragraphs.forEach(paragraph => {
+        paragraph.addEventListener('mouseover', () => highlightParagraphs(paragraph));
+        paragraph.addEventListener('mouseout', () => removeHighlight(paragraph));
+    });
+
+    // Alternar modo oscuro
+    const toggleButton = document.querySelector('.toggle-dark-mode');
+    toggleButton.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        const icon = toggleButton.querySelector('i');
+        icon.classList.toggle('bi-moon-fill');
+        icon.classList.toggle('bi-sun-fill');
+    });
+</script>
+
+</body>
+</html>
