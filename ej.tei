@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Ejemplo de Homofonías y Referencias en TEI</title>
+                <author>Julieta Goldsmith</author>
+            </titleStmt>
+            <publicationStmt>
+                <p>Publicado de manera privada</p>
+            </publicationStmt>
+            <sourceDesc>
+                <p>Ejemplo generado para ilustrar el uso de TEI con homofonías y referencias.</p>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <p>
+                En el discurso de <persName xml:id="p1">Juan Pérez</persName>, se mencionó el lugar conocido como <placeName xml:id="pl1">La Plata</placeName>,
+                en donde ocurrió un interesante juego de palabras con <hi rend="homofonia" audio="#audio1">caza</hi> y <hi rend="homofonia" audio="#audio2">casa</hi>.
+            </p>
+            <p>
+                <note type="reference">Para escuchar la pronunciación de <hi rend="homofonia" ref="#audio1">caza</hi>, consulte el archivo de audio <ref target="audio/caza.mp3">aqui</ref>.</note>
+            </p>
+            <p>
+                <persName xml:id="p2">María Fernández</persName> recordó la importancia de <ref target="https://es.wikipedia.org/wiki/La_Plata">La Plata</ref> en la historia local.
+            </p>
+            <p>
+                Finalmente, <placeName xml:id="pl2">Buenos Aires</placeName> fue mencionado como un punto de referencia para los estudios posteriores.
+            </p>
+        </body>
+    </text>
+</TEI>
